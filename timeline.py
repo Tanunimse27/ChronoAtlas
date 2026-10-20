@@ -19,3 +19,10 @@ def get_time_window(selected_year, default_years=20):
     end_year= selected_year + default_years
 
     return starting_year, end_year
+
+def reverse_internal_year(year):
+    if year<=0:
+        return 1-year,"BCE"
+
+    else:
+        return year, "CE"
