@@ -1,7 +1,11 @@
 
-event_name,start_year,end_year,region,description,latitude,longitude
+event_name,categoery,start_year,end_year,region,description,latitude,longitude
 
-Uruk urban development,-3500,-3000,Mesopotamia,One of the earliest major urban societies with growing administration and early writing,31.3,45.6
-Early dynastic Egypt,-3100,-2686,Northeast Africa,Political unification and the development of the early Egyptian state,26.8,30.8
-Indus Valley early urbanization,-2600,-1900,South Asia,Major urban phase marked by planned settlements and extensive trade,27.3,68.1
-Shang dynasty,-1600,-1046,East Asia,Earliest Chinese dynasty with extensive archaeological evidence and oracle-bone writing,35.6,114.3
+Uruk urban development,Civilization,-3500,-3000,Mesopotamia,One of the earliest major urban societies with growing administration and early writing,31.3,45.6
+Early dynastic Egypt,dynasty,-3100,-2686,Northeast Africa,Political unification and the development of the early Egyptian state,26.8,30.8
+Indus Valley early urbanization,Civilization,-2600,-1900,South Asia,Major urban phase marked by planned settlements and extensive trade,27.3,68.1
+Shang dynasty,dynasty,-1600,-1046,East Asia,Earliest Chinese dynasty with extensive archaeological evidence and oracle-bone writing,35.6,114.3
+Akkadian Empire,Empire,-2333,-2153,Mesopotamia,An early territorial empire associated with Sargon of Akkad that united much of Mesopotamia.,33.1,44.1
+Mauryan Empire,Empire,-321,-184,South Asia,An influential ancient Indian empire founded by Chandragupta Maurya; Ashoka later promoted Buddhism.,25.6,85.1
+Roman Empire,Empire,-26,476,Europe and Mediterranean,The Roman Empire shaped law and governance and engineering and trade across the Mediterranean world. The year 476 CE conventionally marks the end of the Western Roman Empire.,41.9,12.5
+Han Dynasty of China,Dynasty,206,220,East Asia,A major Chinese dynasty associated with the expansion of the imperial state and the Silk Road and advances in technology and administration.,34.3,108.9

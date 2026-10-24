@@ -37,9 +37,11 @@ st.write("Historical context: ",start_display,start_era, " to ",end_display,end_
 
 historical_map = folium.Map(location=[31.3, 45.6], zoom_start=4)
 
-folium.Marker(
-    location=[31.3, 45.6],
-    popup="Mesopotamia, One of the earliest major urban societies with growing administration and early writing"
-).add_to(historical_map)
+for index, row in active_events.iterrows():
+    folium.Marker(
+        location=[row["latitude"], row["longitude"]],
+        popup=f"{row['event_name'], row['description']}"
+    ).add_to(historical_map)
 
-st_folium(historical_map)                 #display map
+st_folium(historical_map)                 #display map 
+
