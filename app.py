@@ -167,6 +167,7 @@ akkadian_region = [
 
 if selected_year>=-3499 and selected_year<=-2999:
     folium.Polygon(locations=mesopotamia_region,
+                   tooltip="Mesopotamia",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -175,6 +176,7 @@ if selected_year>=-3499 and selected_year<=-2999:
 
 if selected_year >= -2600 and selected_year <= -1900:
     folium.Polygon(locations=indus_region,
+               tooltip="Indus valley",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -183,6 +185,7 @@ if selected_year >= -2600 and selected_year <= -1900:
 
 if selected_year >= -3100 and selected_year <= -2686:
     folium.Polygon(locations=egypt_region,
+               tooltip="Egypt",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -191,6 +194,7 @@ if selected_year >= -3100 and selected_year <= -2686:
 
 if selected_year >= -26 and selected_year <= 476:
     folium.Polygon(locations=roman_region,
+               tooltip="Roman",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -199,6 +203,7 @@ if selected_year >= -26 and selected_year <= 476:
 
 if selected_year >= 206 and selected_year <= 220:
     folium.Polygon(locations=han_region,
+               tooltip="Han",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -207,6 +212,7 @@ if selected_year >= 206 and selected_year <= 220:
 
 if selected_year >= -1600 and selected_year <= 1046:
     folium.Polygon(locations=shang_region,
+               tooltip="Shang",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -215,6 +221,7 @@ if selected_year >= -1600 and selected_year <= 1046:
 
 if selected_year >=-321 and selected_year <= -184:
     folium.Polygon(locations=mauryan_region,
+               tooltip="Mauryan",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -223,6 +230,7 @@ if selected_year >=-321 and selected_year <= -184:
 
 if selected_year>=-2333 and selected_year<=-2153:
     folium.Polygon(locations=akkadian_region,
+               tooltip="Akkadian",
                color= "#B8A27A",
                fill_color="#C2A878",
                fill=True,
@@ -238,12 +246,23 @@ for index, row in active_events.iterrows():
 map_col,info_col=st.columns([2,1])
 
 with map_col:
-    st_folium(historical_map,
-          use_container_width=True,
-          height=850
-          )              #display map 
+    map_data = st_folium(
+        historical_map,
+        use_container_width=True,
+        height=850
+    )
+
+    #st.write(map_data)
+    #st.write(map_data.get("last_object_clicked_tooltip"))
+    selected_civilization = map_data.get("last_object_clicked_tooltip")       #variable to store name of clicked civilization/event 
 
 with info_col:
     st.title("Civilization detail")
-    st.write(civilizations["Mesopotamia"]["location"])
-    st.write(civilizations["Mesopotamia"]["period"])
+    #st.write("Selected:", selected_civilization)
+    #st.write("Available keys:", list(civilizations.keys()))
+
+    if selected_civilization in civilizations:                                #way to fetch info from dictionary
+        #st.write("Dictionary match: YES")
+        st.header(selected_civilization)
+        st.write(civilizations[selected_civilization]["location"])
+        st.write(civilizations[selected_civilization]["period"])
