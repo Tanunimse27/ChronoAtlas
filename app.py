@@ -2,6 +2,21 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
+from branca.element import Element
+from civilization_data import civilizations
+
+st.set_page_config(layout="wide")
+st.markdown("""
+    <style>
+        .block-container {
+            padding-top: 1rem;
+            padding-bottom: 0rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            max-width: 100%;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 events=pd.read_csv("events.csv")
 
@@ -35,9 +50,51 @@ end_display,end_era=reverse_internal_year(end_year)
 
 st.write("Historical context: ",start_display,start_era, " to ",end_display,end_era) 
 
-historical_map = folium.Map(tiles="OpenStreetMap",
-                            location=[31.3, 45.6], 
-                            zoom_start=4)
+historical_map = folium.Map(
+    location=[20, 0],
+    zoom_start=2,
+    min_zoom=2,
+    max_zoom=8,
+    tiles=None,
+    max_bounds=True
+)
+
+folium.TileLayer(
+    tiles="OpenStreetMap",
+    no_wrap=True
+).add_to(historical_map)
+
+historical_map.options["maxBounds"] = [[-85, -180], [85, 180]]
+historical_map.options["maxBoundsViscosity"] = 1.0
+
+historical_map.options["maxBoundsViscosity"] = 1.0
+
+
+zoom_script = f"""
+(function() {{
+    var map = {historical_map.get_name()};
+    var worldBounds = L.latLngBounds(
+        [[-85, -180], [85, 180]]
+    );
+
+    function adjustZoom() {{
+        var minZoom = map.getBoundsZoom(worldBounds, true);
+        map.setMinZoom(minZoom);
+
+        if (map.getZoom() < minZoom) {{
+            map.setZoom(minZoom);
+        }}
+    }}
+
+    map.whenReady(function() {{
+        adjustZoom();
+        map.on("resize", adjustZoom);
+    }});
+}})();
+"""
+
+historical_map.get_root().script.add_child(Element(zoom_script))
+
 
 #geographical points
 mesopotamia_region = [
@@ -178,5 +235,15 @@ for index, row in active_events.iterrows():
         popup=f"{row['event_name'], row['description']}"
     ).add_to(historical_map)
 
-st_folium(historical_map)                 #display map 
+map_col,info_col=st.columns([2,1])
 
+with map_col:
+    st_folium(historical_map,
+          use_container_width=True,
+          height=850
+          )              #display map 
+
+with info_col:
+    st.title("Civilization detail")
+    st.write(civilizations["Mesopotamia"]["location"])
+    st.write(civilizations["Mesopotamia"]["period"])
