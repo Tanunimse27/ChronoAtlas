@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import folium
+import xyzservices.providers
 from streamlit_folium import st_folium
 from branca.element import Element
 from civilization_data import civilizations
@@ -50,6 +51,8 @@ end_display,end_era=reverse_internal_year(end_year)
 
 st.write("Historical context: ",start_display,start_era, " to ",end_display,end_era) 
 
+map_key = st.secrets["MAPTILER_API_KEY"]
+
 historical_map = folium.Map(
     location=[20, 0],
     zoom_start=2,
@@ -60,7 +63,9 @@ historical_map = folium.Map(
 )
 
 folium.TileLayer(
-    tiles="OpenStreetMap",
+    tiles=f"https://api.maptiler.com/maps/topo-v2/256/{{z}}/{{x}}/{{y}}.png?key={map_key}",
+    attr='© MapTiler © OpenStreetMap contributors',
+    name="Historical Atlas",
     no_wrap=True
 ).add_to(historical_map)
 
