@@ -7,6 +7,36 @@ from branca.element import Element
 from civilization_data import civilizations
 
 st.set_page_config(layout="wide")
+
+#st.write("Session state type:", type(st.session_state))
+#st.write("Session state value:", st.session_state)
+if "map_reset" not in st.session_state:
+    st.session_state["map_reset"] = 0
+
+if "page" not in st.session_state:
+    st.session_state["page"]="map" 
+
+if "civilization" not in st.session_state:
+    st.session_state["civilization"]=None
+
+if "section" not in st.session_state:
+    st.session_state["section"]=None
+
+
+
+if st.session_state["page"] == "civilization":
+    st.title(st.session_state["civilization"])
+    st.write("Civilization profile page")
+
+    if st.button("Back to World Map"):
+        st.session_state["page"] = "map"
+        st.session_state["civilization"] = None
+        st.session_state["map_reset"] += 1
+        st.rerun()
+
+    st.stop()
+    
+
 st.markdown("""
     <style>
         .block-container {
@@ -63,7 +93,7 @@ historical_map = folium.Map(
 )
 
 folium.TileLayer(
-    tiles=f"https://api.maptiler.com/maps/topo-v2/256/{{z}}/{{x}}/{{y}}.png?key={map_key}",
+    tiles=f"https://api.maptiler.com/maps/aquarelle/256/{{z}}/{{x}}/{{y}}.png?key={map_key}",
     attr='© MapTiler © OpenStreetMap contributors',
     name="Historical Atlas",
     no_wrap=True
@@ -254,12 +284,18 @@ with map_col:
     map_data = st_folium(
         historical_map,
         use_container_width=True,
-        height=850
+        height=850,
+        key=f"historical_map_{st.session_state['map_reset']}"
     )
 
     #st.write(map_data)
     #st.write(map_data.get("last_object_clicked_tooltip"))
     selected_civilization = map_data.get("last_object_clicked_tooltip")       #variable to store name of clicked civilization/event 
+
+    if selected_civilization in civilizations:
+        st.session_state["civilization"]=selected_civilization
+        st.session_state["page"]="civilization"
+        st.rerun()
 
 with info_col:
     st.title("Civilization detail")
