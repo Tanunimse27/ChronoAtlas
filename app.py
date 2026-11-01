@@ -1,3 +1,5 @@
+import base64
+from pathlib import Path
 import streamlit as st
 import pandas as pd
 import folium
@@ -5,6 +7,7 @@ import xyzservices.providers
 from streamlit_folium import st_folium
 from branca.element import Element
 from civilization_data import civilizations
+
 
 st.set_page_config(layout="wide")
 
@@ -22,11 +25,49 @@ if "civilization" not in st.session_state:
 if "section" not in st.session_state:
     st.session_state["section"]=None
 
+def get_bg_img():
+    img_path = Path(__file__).parent / "assets" / "2.jpg"
 
+    with open(img_path, "rb") as image_file:
+        img_data = image_file.read()
+
+    encoded_img = base64.b64encode(img_data).decode()
+
+    return encoded_img
+
+def load_css():
+    css_path=Path(__file__).parent /"style.css"
+
+    with open(css_path, "r") as css_file:
+        css=css_file.read()
+
+    return css
+css=load_css()
+
+st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 if st.session_state["page"] == "civilization":
-    st.title(st.session_state["civilization"])
-    st.write("Civilization profile page")
+    bg_img = get_bg_img()
+
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url("data:image/jpeg;base64,{bg_img}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+    st.markdown(
+    f'<h1 class="civilization-title">{st.session_state["civilization"]}</h1>',
+    unsafe_allow_html=True
+)
+    st.markdown(
+        f'<p class="civilization-overview">{civilizations[st.session_state["civilization"]]["overview"]}</p>',
+        unsafe_allow_html=True
+)
+    #st.write("Civilization profile page")
 
     if st.button("Back to World Map"):
         st.session_state["page"] = "map"

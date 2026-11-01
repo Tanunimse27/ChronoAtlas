@@ -1,0 +1,17 @@
+.stMarkdown h1.civilization-title {
+    color: #D6B875;
+    font-family: Georgia, serif;
+    text-align: right;
+    padding-right: 60px;
+    font-size: 52px;
+}
+
+.stMarkdown .civilization-overview {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    text-align: right;
+    line-height: 1.6;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: 60px;
+}
