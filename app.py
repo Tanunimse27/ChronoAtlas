@@ -35,6 +35,16 @@ def get_bg_img():
 
     return encoded_img
 
+def get_home_bg_img():
+    img_path = Path(__file__).parent / "assets" / "chronoatlas-bg-1.jpg"
+
+    with open(img_path, "rb") as image_file:
+        img_data = image_file.read()
+
+    encoded_img = base64.b64encode(img_data).decode()
+
+    return encoded_img
+
 def load_css():
     css_path=Path(__file__).parent /"style.css"
 
@@ -45,6 +55,21 @@ def load_css():
 css=load_css()
 
 st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+
+if st.session_state["page"] == "map":
+    home_bg_img = get_home_bg_img()
+
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{home_bg_img}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
 
 if st.session_state["page"] == "civilization":
     bg_img = get_bg_img()
