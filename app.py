@@ -16,6 +16,10 @@ st.set_page_config(layout="wide")
 
 #st.write("Session state type:", type(st.session_state))
 #st.write("Session state value:", st.session_state)
+
+if "selected_item" not in st.session_state:
+    st.session_state["selected_item"] = None
+
 if "map_reset" not in st.session_state:
     st.session_state["map_reset"] = 0
 
@@ -147,9 +151,42 @@ active_events=events[
     (events["end_year"]>=selected_year)
 ]
 
-st.dataframe(active_events)                       #display filtered data
+if selected_category == "Wars":
+    active_records = {
+        name: details
+        for name, details in wars.items()
+        if details["start_year"] <= selected_year <= details["end_year"]
+    }
 
-st.map(active_events[["latitude","longitude"]])
+elif selected_category == "Historical Figures":
+    active_records = {
+        name: details
+        for name, details in historical_figures.items()
+        if details["start_year"] <= selected_year <= details["end_year"]
+    }
+
+elif selected_category == "Inventions":
+    active_records = {
+        name: details
+        for name, details in inventions.items()
+        if details["start_year"] == selected_year
+    }
+
+else:
+    active_records = {}
+
+if selected_category == "Civilizations":
+    st.dataframe(active_events)
+
+elif active_records:
+    for name, details in active_records.items():
+        if st.button(name, key=f"{selected_category}_{name}"):
+            st.session_state["selected_item"] = {
+                "category": selected_category,
+                "name": name
+            }
+else:
+    st.info("No records found for this category in the selected year.")
 display_year, era = reverse_internal_year(selected_year)
 st.write("You are exploring events from : ",display_year, era)
 
@@ -369,20 +406,50 @@ with map_col:
 
     #st.write(map_data)
     #st.write(map_data.get("last_object_clicked_tooltip"))
-    selected_civilization = map_data.get("last_object_clicked_tooltip")       #variable to store name of clicked civilization/event 
+    selected_civilization = map_data.get("last_object_clicked_tooltip")
 
     if selected_civilization in civilizations:
-        st.session_state["civilization"]=selected_civilization
-        st.session_state["page"]="civilization"
-        st.rerun()
+        st.session_state["selected_item"] = {
+        "category": "Civilizations",
+        "name": selected_civilization
+    }
 
-with info_col:
-    st.title("Civilization detail")
-    #st.write("Selected:", selected_civilization)
-    #st.write("Available keys:", list(civilizations.keys()))
+    with info_col:
+        st.title("Historical Detail")
 
-    if selected_civilization in civilizations:                                #way to fetch info from dictionary
-        #st.write("Dictionary match: YES")
+    selected_item = st.session_state["selected_item"]
+
+    if selected_item:
+        category = selected_item["category"]
+        name = selected_item["name"]
+
+        if category == "Wars":
+            details = wars[name]
+
+        if category == "Civilizations":
+            details = civilizations[name]
+
+        elif category == "Wars":
+         details = wars[name]
+
+        elif category == "Historical Figures":
+            details = historical_figures[name]
+
+        elif category == "Inventions":
+            details = inventions[name]
+
+        else:
+            details = {}
+
+        if details:
+            st.header(name)
+            st.write("Period:", details["period"])
+            st.write(
+                "Region:",
+                details.get("region", details.get("location", "Not specified"))
+            )
+
+    elif selected_civilization in civilizations:
         st.header(selected_civilization)
         st.write(civilizations[selected_civilization]["location"])
         st.write(civilizations[selected_civilization]["period"])

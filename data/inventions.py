@@ -1,4 +1,3 @@
-
 inventions = {
 
     # Ancient period

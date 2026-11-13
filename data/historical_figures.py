@@ -11,7 +11,7 @@ historical_figures = {
 
     "Hammurabi": {
         "location": "Babylon, Mesopotamia",
-        "period": c. 1810–1750 BCE",
+        "period": "c. 1810–1750 BCE",
         "start_year": -1809,
         "end_year": -1749
     },
@@ -81,7 +81,7 @@ historical_figures = {
 
     "Ashoka": {
         "location": "Mauryan Empire, Indian subcontinent",
-        "period": c. 304–232 BCE",
+        "period": "c. 304–232 BCE",
         "start_year": -303,
         "end_year": -231
     },
