@@ -6,8 +6,11 @@ import folium
 import xyzservices.providers
 from streamlit_folium import st_folium
 from branca.element import Element
-from civilization_data import civilizations
-
+from data.civilizations import civilizations
+from data.wars import wars
+from data.historical_figures import historical_figures
+from data.inventions import inventions
+from utils.map_helpers import add_civilization_polygons
 
 st.set_page_config(layout="wide")
 
@@ -121,6 +124,16 @@ from timeline import to_internal_year, reverse_internal_year, get_time_window
 
 st.title("ChronoAtlas: The World Through Time")
 st.write("Explore world history through time. Discover historical events from different regions and civilizations that were happening around the same year.")
+
+selected_category = st.selectbox(
+    "Explore history by",
+    [
+        "Civilizations",
+        "Wars",
+        "Historical Figures",
+        "Inventions"
+    ]
+)
 
 selected_year=st.slider(
     "Select the historical year",
